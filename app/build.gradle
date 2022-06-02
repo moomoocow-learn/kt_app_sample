@@ -25,6 +25,8 @@ repositories {
         credentials {
             username = System.getenv("GITHUB_ACTOR")
             password = System.getenv("GITHUB_TOKEN")
+
+            print("username=$username")
         }
     }    
     mavenCentral()

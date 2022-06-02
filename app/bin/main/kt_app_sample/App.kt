@@ -5,6 +5,13 @@ package kt_app_sample
 
 import kt_lib_sample.Library
 
+import io.ktor.server.netty.*
+import io.ktor.server.routing.*
+import io.ktor.server.application.*
+import io.ktor.http.*
+import io.ktor.server.response.*
+import io.ktor.server.engine.*
+
 class App {
     val greeting: String
         get() {
@@ -12,9 +19,22 @@ class App {
         }
 }
 
-fun main() {
+fun main(args: Array<String>) {
+    val lib = Library()
     println(App().greeting)
-    println(Library().someLibraryMethod())
-    println(Library().msg())
-    println(Library().libVersion())
+    println(lib.someLibraryMethod())
+    println(lib.msg())
+    println(lib.libVersion())
+
+
+    embeddedServer(Netty, 8080) {
+        routing {
+            get("/") {
+                call.respondText("Hello, world!", ContentType.Text.Html)
+            }
+            get("/libver") {
+                call.respondText(lib.libVersion(), ContentType.Text.Html)
+            }
+        }
+    }.start(wait = true)
 }
